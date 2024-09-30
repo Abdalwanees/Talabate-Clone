@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Talabate.Clone.Repository.Data.Contexts;
+
 namespace Talabate.Clone.API
 {
     public class Program
@@ -12,6 +15,11 @@ namespace Talabate.Clone.API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            //Allow dependancy injection 
+            builder.Services.AddDbContext<StoreDbContext>(option =>
+            {
+            option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnction"));
+            });
 
             var app = builder.Build();
 
