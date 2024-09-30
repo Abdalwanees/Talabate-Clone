@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Services.Contruct\" />
-    <Folder Include="Repository.Contruct\" />
   </ItemGroup>
 
 </Project>
