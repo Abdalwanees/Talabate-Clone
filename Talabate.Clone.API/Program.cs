@@ -1,5 +1,9 @@
+using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.EntityFrameworkCore;
+using Talabate.Clone.Core.Entites;
+using Talabate.Clone.Core.Repository.Contruct;
 using Talabate.Clone.Repository.Data.Contexts;
+using Talabate.Clone.Repository.Repositories;
 
 namespace Talabate.Clone.API
 {
@@ -20,7 +24,10 @@ namespace Talabate.Clone.API
             {
             option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnction"));
             });
-
+            //builder.Services.AddScoped<IGenaricRepository<Product>, GenaricRepository<Product>>();
+            //builder.Services.AddScoped<IGenaricRepository<ProductBrand>, GenaricRepository<ProductBrand>>();
+            //builder.Services.AddScoped<IGenaricRepository<ProductCategories>, GenaricRepository<ProductCategories>>();
+            builder.Services.AddScoped(typeof(IGenaricRepository<>), typeof(GenaricRepository<>));
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())
