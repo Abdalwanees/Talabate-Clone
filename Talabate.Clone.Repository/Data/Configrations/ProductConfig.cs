@@ -13,12 +13,29 @@ namespace Talabate.Clone.Repository.Data.Configrations
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
-            builder.Property(P => P.Name).IsRequired().HasMaxLength(100);
-            builder.Property(P=>P.Description).IsRequired();
-            builder.Property(P=>P.pictureUrl).IsRequired();
-            builder.Property(P=>P.Price).HasColumnType("decimal(18.2)");
-            builder.HasOne(P=>P.Brand).WithMany().HasForeignKey(P=>P.BrandId).OnDelete(DeleteBehavior.Cascade);
-            builder.HasOne(P=>P.Category).WithMany().HasForeignKey(P=>P.CategoryId).OnDelete(DeleteBehavior.Cascade);
+            builder.Property(p => p.Name)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            builder.Property(p => p.Description)
+                .IsRequired();
+
+            builder.Property(p => p.PictureUrl) 
+                .IsRequired();
+
+            builder.Property(p => p.Price)
+                .HasColumnType("decimal(18,2)");
+
+            builder.HasOne(p => p.Brand)
+                .WithMany()
+                .HasForeignKey(p => p.BrandId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(p => p.Category)
+                .WithMany()
+                .HasForeignKey(p => p.CategoryId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
+
     }
 }

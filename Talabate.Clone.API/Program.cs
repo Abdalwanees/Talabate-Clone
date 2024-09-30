@@ -23,6 +23,27 @@ namespace Talabate.Clone.API
 
             var app = builder.Build();
 
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                try
+                {
+                    var dbContext = services.GetRequiredService<StoreDbContext>();
+
+                    // Apply any pending migrations automatically
+                    dbContext.Database.Migrate();
+                }
+                catch (Exception ex)
+                {
+                    // Log errors or handle exceptions
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "An error occurred while migrating the database.");
+                }
+            }
+
+
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
