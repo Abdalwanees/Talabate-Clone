@@ -30,7 +30,7 @@ namespace Talabate.Clone.API
             //builder.Services.AddScoped<IGenaricRepository<ProductCategories>, GenaricRepository<ProductCategories>>();
             builder.Services.AddScoped(typeof(IGenaricRepository<>), typeof(GenaricRepository<>));
             
-            builder.Services.AddAutoMapper(M=>M.AddProfile(typeof(MappingProfile)));
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())
@@ -69,7 +69,7 @@ namespace Talabate.Clone.API
 
             app.UseAuthorization();
 
-
+            app.UseStaticFiles();
             app.MapControllers();
 
             app.Run();
