@@ -6,7 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Talabate.Clone.Core.Entites;
 using Talabate.Clone.Core.Repository.Contruct;
+using Talabate.Clone.Core.Specifications;
 using Talabate.Clone.Repository.Data.Contexts;
+using Talabate.Clone.Repository.Specifications;
 
 namespace Talabate.Clone.Repository.Repositories
 {
@@ -41,6 +43,16 @@ namespace Talabate.Clone.Repository.Repositories
 
             return await _dbContext.Set<T>().FindAsync(id); // Use id.Value for FindAsync
         }
+        public async Task<IEnumerable<T>> GetAllWithSpecAsync(ISpecification<T> specification)
+        {
+            return await SpecificationEvaluator<T>.GetQuary(_dbContext.Set<T>(), specification)
+                .AsNoTracking().ToListAsync();
+        }
 
+        public async Task<T?> GetWithSpecAsync(ISpecification<T> specification)
+        {
+            return await SpecificationEvaluator<T>.GetQuary(_dbContext.Set<T>(), specification)
+                .AsNoTracking().FirstOrDefaultAsync();
+        }
     }
 }
