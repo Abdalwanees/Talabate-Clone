@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.EntityFrameworkCore;
+using Talabate.Clone.API.Helpers;
 using Talabate.Clone.Core.Entites;
 using Talabate.Clone.Core.Repository.Contruct;
 using Talabate.Clone.Repository.Data.Contexts;
@@ -28,6 +29,8 @@ namespace Talabate.Clone.API
             //builder.Services.AddScoped<IGenaricRepository<ProductBrand>, GenaricRepository<ProductBrand>>();
             //builder.Services.AddScoped<IGenaricRepository<ProductCategories>, GenaricRepository<ProductCategories>>();
             builder.Services.AddScoped(typeof(IGenaricRepository<>), typeof(GenaricRepository<>));
+            
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())
@@ -66,7 +69,7 @@ namespace Talabate.Clone.API
 
             app.UseAuthorization();
 
-
+            app.UseStaticFiles();
             app.MapControllers();
 
             app.Run();
