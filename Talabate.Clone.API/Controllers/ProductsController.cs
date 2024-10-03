@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Talabate.Clone.API.DTOs;
 using Talabate.Clone.Core.Entites;
 using Talabate.Clone.Core.Repository.Contruct;
 using Talabate.Clone.Core.Specifications;
@@ -10,30 +12,35 @@ namespace Talabate.Clone.API.Controllers
     public class ProductsController : BaseController
     {
         private readonly IGenaricRepository<Product> _productRepository;
+        private readonly IMapper _mapper;
 
-        public ProductsController(IGenaricRepository<Product> productRepository)
+        public ProductsController(IGenaricRepository<Product> productRepository ,IMapper mapper)
         {
             _productRepository = productRepository;
+            _mapper = mapper;
         }
         //BaseUrl/api/Products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts()
         {
            //var products=await _productRepository.GetAllWithSpecAsync(new BaseSpecifications<Product>());//Use Specification design pattern
            var products=await _productRepository.GetAllWithSpecAsync(new ProductIncludesSpecification()); //Use Specification design pattern
-            return Ok(products);
+            var MappedProduct=_mapper.Map<IEnumerable<Product>,IEnumerable<ProductDto>>(products);
+            return Ok(MappedProduct);
         }
         [HttpGet("{Id}")]
-        public async Task<ActionResult<Product>> GetProduct(int Id)
+        public async Task<ActionResult<ProductDto>> GetProduct(int Id)
         {
             var product = await _productRepository.GetWithSpecAsync(new ProductIncludesSpecification());
-            if (product == null)
+            var MappedProduct=_mapper.Map<Product,ProductDto>(product);
+
+            if (MappedProduct == null)
             {
                 return NotFound(new {Message="Not Found product",StatusCode=404});
             }
             else
             {
-                return Ok(product);
+                return Ok(MappedProduct);
             }
         }
      }
