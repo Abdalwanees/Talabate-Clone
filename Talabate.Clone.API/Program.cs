@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Talabate.Clone.API.Errors;
 using Talabate.Clone.API.Helpers;
+using Talabate.Clone.API.MiddleWare;
 using Talabate.Clone.Core.Entites;
 using Talabate.Clone.Core.Repository.Contruct;
 using Talabate.Clone.Repository.Data.Contexts;
@@ -75,6 +76,9 @@ namespace Talabate.Clone.API
 
 
             // Configure the HTTP request pipeline.
+            app.UseMiddleware<ExceptionMiddleware>();
+
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
