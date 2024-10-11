@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Talabate.Clone.API.Errors;
 using Talabate.Clone.Repository.Data.Contexts;
 
 namespace Talabate.Clone.API.Controllers
@@ -14,30 +15,37 @@ namespace Talabate.Clone.API.Controllers
         {
             _context = context;
         }
-        [HttpGet("NotFound")] 
+        [HttpGet("NotFound")]
         public ActionResult GetNotFoundError()
         {
             var product = _context.Products.Find(100);
             if (product == null)
             {
-                return NotFound();
+                return NotFound(new ApiResponse(404));
             }
             return Ok(product);
         }
         [HttpGet("ServrError")]
         public ActionResult GetServerError()
         {
-            var product=_context.Products.Find(100);
+            var product = _context.Products.Find(100);
             var productDto = product.ToString();
             return Ok(productDto);
         }
         [HttpGet("BadRequest")]
-        public ActionResult GetBadRequest() {
-        return BadRequest();
+        public ActionResult GetBadRequest()
+        {
+            return BadRequest(new ApiResponse(400));
+        }
+        [HttpGet("Unauthorized")]
+        public ActionResult GetUnauthorized()
+        {
+            return Unauthorized(new ApiResponse(401));
         }
         [HttpGet("BadRequest/{Id}")]
-        public ActionResult GetBadRequest(int Id) {
-        return Ok();
+        public ActionResult GetBadRequest(int Id)
+        {
+            return Ok();
         }
 
         // try to test end point not found

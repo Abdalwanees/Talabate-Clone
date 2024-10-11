@@ -23,8 +23,6 @@ namespace Talabate.Clone.Repository.Specifications
             }
             Query=specification.Includes.Aggregate(Query,(currentQuary,includeExpression)=>currentQuary.Include(includeExpression));
             return Query;
-
-
         }
 
     }
