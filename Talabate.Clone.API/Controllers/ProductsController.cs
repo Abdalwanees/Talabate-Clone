@@ -21,6 +21,8 @@ namespace Talabate.Clone.API.Controllers
             _mapper = mapper;
         }
         //BaseUrl/api/Products
+        [ProducesResponseType(typeof(ProductDto),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status404NotFound)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts()
         {
@@ -33,6 +35,8 @@ namespace Talabate.Clone.API.Controllers
             }
             return NotFound(new ApiResponse(404, "Not found any products"));
         }
+        [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet("{Id}")]
         public async Task<ActionResult<ProductDto>> GetProduct(int Id)
         {

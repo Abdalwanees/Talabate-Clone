@@ -77,6 +77,7 @@ namespace Talabate.Clone.API
 
             // Configure the HTTP request pipeline.
             app.UseMiddleware<ExceptionMiddleware>();
+            app.UseStatusCodePagesWithRedirects("/Errors/{0}");
 
 
             if (app.Environment.IsDevelopment())
