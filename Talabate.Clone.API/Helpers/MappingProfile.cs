@@ -12,7 +12,8 @@ namespace Talabate.Clone.API.Helpers
                 .ForMember(D=>D.BrandName,O=>O.MapFrom(P=>P.Brand.Name))
                 .ForMember(D => D.CategoryName, O => O.MapFrom(P => P.Category.Name))
                 .ForMember(D=>D.PictureUrl,O=>O.MapFrom<PictureUrlResolver>());
-
+            CreateMap<ProductBrand, ProductBrandDto>().ReverseMap();
+            CreateMap<ProductCategories, ProductCategoryDto>().ReverseMap();
         }
     }
 }
