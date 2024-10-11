@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.HttpLogging;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Talabate.Clone.API.Errors;
 using Talabate.Clone.API.Helpers;
+using Talabate.Clone.API.MiddleWare;
 using Talabate.Clone.Core.Entites;
 using Talabate.Clone.Core.Repository.Contruct;
 using Talabate.Clone.Repository.Data.Contexts;
@@ -23,14 +27,27 @@ namespace Talabate.Clone.API
             //Allow dependancy injection 
             builder.Services.AddDbContext<StoreDbContext>(option =>
             {
-            option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnction"));
+                option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnction"));
             });
             //builder.Services.AddScoped<IGenaricRepository<Product>, GenaricRepository<Product>>();
             //builder.Services.AddScoped<IGenaricRepository<ProductBrand>, GenaricRepository<ProductBrand>>();
             //builder.Services.AddScoped<IGenaricRepository<ProductCategories>, GenaricRepository<ProductCategories>>();
             builder.Services.AddScoped(typeof(IGenaricRepository<>), typeof(GenaricRepository<>));
-            
+
             builder.Services.AddAutoMapper(typeof(MappingProfile));
+            builder.Services.Configure<ApiBehaviorOptions>(Options =>
+            {
+                Options.InvalidModelStateResponseFactory = (actionContext) =>
+                {
+                    var errors = actionContext.ModelState.Where(E => E.Value.Errors.Count() > 0).SelectMany(E => E.Value.Errors).Select(E => E.ErrorMessage).ToList();
+                    var response = new ApiValidationResponse()
+                    {
+                        Errors = errors
+                    };
+                    return new BadRequestObjectResult(response);
+                };
+            }); // Register by default
+
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())
@@ -59,6 +76,10 @@ namespace Talabate.Clone.API
 
 
             // Configure the HTTP request pipeline.
+            app.UseMiddleware<ExceptionMiddleware>();
+            app.UseStatusCodePagesWithRedirects("/Errors/{0}");
+
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
