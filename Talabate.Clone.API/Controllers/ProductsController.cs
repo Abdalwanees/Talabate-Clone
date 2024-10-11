@@ -14,42 +14,74 @@ namespace Talabate.Clone.API.Controllers
     {
         private readonly IGenaricRepository<Product> _productRepository;
         private readonly IMapper _mapper;
+        private readonly IGenaricRepository<ProductBrand> _brands;
+        private readonly IGenaricRepository<ProductCategories> _categories;
 
-        public ProductsController(IGenaricRepository<Product> productRepository, IMapper mapper)
+        public ProductsController(IGenaricRepository<Product> productRepository, IMapper mapper, IGenaricRepository<ProductBrand> brands, IGenaricRepository<ProductCategories> categories)
         {
             _productRepository = productRepository;
             _mapper = mapper;
+            _brands = brands;
+            _categories = categories;
         }
-        //BaseUrl/api/Products
-        [ProducesResponseType(typeof(ProductDto),StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status404NotFound)]
+
+        // BaseUrl/api/Products
+        [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts()
         {
-            //var products=await _productRepository.GetAllWithSpecAsync(new BaseSpecifications<Product>());//Use Specification design pattern
-            var products = await _productRepository.GetAllWithSpecAsync(new ProductIncludesSpecification()); //Use Specification design pattern
+            var products = await _productRepository.GetAllWithSpecAsync(new ProductIncludesSpecification()); // Using Specification pattern
             if (products != null)
             {
-                var MappedProduct = _mapper.Map<IEnumerable<Product>, IEnumerable<ProductDto>>(products);
-                return Ok(MappedProduct);
+                var mappedProducts = _mapper.Map<IEnumerable<Product>, IEnumerable<ProductDto>>(products);
+                return Ok(mappedProducts);
             }
-            return NotFound(new ApiResponse(404, "Not found any products"));
+            return NotFound(new ApiResponse(404, "No products found"));
         }
+
         [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [HttpGet("{Id}")]
+        [HttpGet("/api/product/{Id}")]
         public async Task<ActionResult<ProductDto>> GetProduct(int Id)
         {
             var product = await _productRepository.GetWithSpecAsync(new ProductIncludesSpecification(Id));
             if (product == null)
             {
-                return NotFound(new ApiResponse(404, "Product Not Found"));
+                return NotFound(new ApiResponse(404, "Product not found"));
             }
-            else
-            {
-                var MappedProduct = _mapper.Map<Product, ProductDto>(product);
-                return Ok(MappedProduct);
-            }
+            var mappedProduct = _mapper.Map<Product, ProductDto>(product);
+            return Ok(mappedProduct);
         }
+
+        [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [HttpGet("brands")]
+        public async Task<ActionResult<IEnumerable<ProductBrandDto>>> GetAllBrands()
+        {
+            var brands = await _brands.GetAllAsync();
+            if (brands == null || !brands.Any())
+            {
+                return NotFound(new ApiResponse(404, "No brands found"));
+            }
+
+            var mappedBrands = _mapper.Map<IEnumerable<ProductBrand>, IEnumerable<ProductBrandDto>>(brands);
+            return Ok(mappedBrands);
+        }
+        [ProducesResponseType(typeof(ProductCategoryDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [HttpGet("categories")]
+        public async Task<ActionResult<IEnumerable<ProductCategoryDto>>> GetAllCategories()
+        {
+            var categories = await _categories.GetAllAsync();
+            if (categories == null || !categories.Any())
+            {
+                return NotFound(new ApiResponse(404, "No categories found"));
+            }
+
+            var mappedCategories = _mapper.Map<IEnumerable<ProductCategories>, IEnumerable<ProductCategoryDto>>(categories);
+            return Ok(mappedCategories);
+        }
+
     }
 }

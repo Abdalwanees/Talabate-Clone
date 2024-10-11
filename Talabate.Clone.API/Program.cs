@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Talabate.Clone.API.Errors;
+using Talabate.Clone.API.Extensions;
 using Talabate.Clone.API.Helpers;
 using Talabate.Clone.API.MiddleWare;
 using Talabate.Clone.Core.Entites;
@@ -24,68 +25,70 @@ namespace Talabate.Clone.API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            //Allow dependancy injection 
-            builder.Services.AddDbContext<StoreDbContext>(option =>
-            {
-                option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnction"));
-            });
+            builder.Services.AddApplicationServices(builder.Configuration); // Extention Method to register All Services
+            //Allow dependancy injection
+            //builder.Services.AddDbContext<StoreDbContext>(option =>
+            //{
+            //    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnction"));
+            //});
             //builder.Services.AddScoped<IGenaricRepository<Product>, GenaricRepository<Product>>();
             //builder.Services.AddScoped<IGenaricRepository<ProductBrand>, GenaricRepository<ProductBrand>>();
             //builder.Services.AddScoped<IGenaricRepository<ProductCategories>, GenaricRepository<ProductCategories>>();
-            builder.Services.AddScoped(typeof(IGenaricRepository<>), typeof(GenaricRepository<>));
+            //builder.Services.AddScoped(typeof(IGenaricRepository<>), typeof(GenaricRepository<>));
 
-            builder.Services.AddAutoMapper(typeof(MappingProfile));
-            builder.Services.Configure<ApiBehaviorOptions>(Options =>
-            {
-                Options.InvalidModelStateResponseFactory = (actionContext) =>
-                {
-                    var errors = actionContext.ModelState.Where(E => E.Value.Errors.Count() > 0).SelectMany(E => E.Value.Errors).Select(E => E.ErrorMessage).ToList();
-                    var response = new ApiValidationResponse()
-                    {
-                        Errors = errors
-                    };
-                    return new BadRequestObjectResult(response);
-                };
-            }); // Register by default
+            //builder.Services.AddAutoMapper(typeof(MappingProfile));
+            //builder.Services.Configure<ApiBehaviorOptions>(Options =>
+            //{
+            //    Options.InvalidModelStateResponseFactory = (actionContext) =>
+            //    {
+            //        var errors = actionContext.ModelState.Where(E => E.Value.Errors.Count() > 0).SelectMany(E => E.Value.Errors).Select(E => E.ErrorMessage).ToList();
+            //        var response = new ApiValidationResponse()
+            //        {
+            //            Errors = errors
+            //        };
+            //        return new BadRequestObjectResult(response);
+            //    };
+            //}); // Register by default
+            
 
             var app = builder.Build();
 
-            using (var scope = app.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
+            //using (var scope = app.Services.CreateScope())
+            //{
+            //    var services = scope.ServiceProvider;
 
-                try
-                {
-                    var dbContext = services.GetRequiredService<StoreDbContext>();
+            //    try
+            //    {
+            //        var dbContext = services.GetRequiredService<StoreDbContext>();
 
-                    // Apply any pending migrations automatically
-                    await dbContext.Database.MigrateAsync();
-                    // Apply DataSeeding
-                    await StoreDbContextSeeding.SeedAsync(dbContext);
-
-
-                }
-                catch (Exception ex)
-                {
-                    // Log errors or handle exceptions
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occurred while migrating the database.");
-                }
-            }
+            //        // Apply any pending migrations automatically
+            //        await dbContext.Database.MigrateAsync();
+            //        // Apply DataSeeding
+            //        await StoreDbContextSeeding.SeedAsync(dbContext);
 
 
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        // Log errors or handle exceptions
+            //        var logger = services.GetRequiredService<ILogger<Program>>();
+            //        logger.LogError(ex, "An error occurred while migrating the database.");
+            //    }
+            //}
 
-            // Configure the HTTP request pipeline.
-            app.UseMiddleware<ExceptionMiddleware>();
-            app.UseStatusCodePagesWithRedirects("/Errors/{0}");
 
 
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            //// Configure the HTTP request pipeline.
+            //app.UseMiddleware<ExceptionMiddleware>();
+            //app.UseStatusCodePagesWithRedirects("/Errors/{0}");
 
+
+            //if (app.Environment.IsDevelopment())
+            //{
+            //    app.UseSwagger();
+            //    app.UseSwaggerUI();
+            //}
+            await app.UseApplicationMiddlewares();
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
