@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35004.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Talabate.Clone.API", "Talabate.Clone.API\Talabate.Clone.API.csproj", "{93499D05-64B6-42AC-B226-EE9FAC7EC367}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Talabate.Clone.API", "Talabate.Clone.API\Talabate.Clone.API.csproj", "{93499D05-64B6-42AC-B226-EE9FAC7EC367}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Talabate.Clone.Core", "Talabate.Clone.Core\Talabate.Clone.Core.csproj", "{315C9D3D-FC91-4433-A0AE-40496C76172A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Talabate.Clone.Core", "Talabate.Clone.Core\Talabate.Clone.Core.csproj", "{315C9D3D-FC91-4433-A0AE-40496C76172A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Talabate.Clone.Repository", "Talabate.Clone.Repository\Talabate.Clone.Repository.csproj", "{E193CBFD-B5B0-4879-A1A8-77D352C89300}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Talabate.Clone.Repository", "Talabate.Clone.Repository\Talabate.Clone.Repository.csproj", "{E193CBFD-B5B0-4879-A1A8-77D352C89300}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Talapate.Clone.Services", "Talapate.Clone.Services\Talapate.Clone.Services.csproj", "{4E17E5F1-4F93-4C82-B0B1-5999DA502DFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Talapate.Clone.Services", "Talapate.Clone.Services\Talapate.Clone.Services.csproj", "{4E17E5F1-4F93-4C82-B0B1-5999DA502DFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Talabat-Clone.AdminDashboard", "Talabat-Clone.AdminDashboard\Talabat-Clone.AdminDashboard.csproj", "{5AC59943-2140-439B-AAA4-BD74CA6207E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{4E17E5F1-4F93-4C82-B0B1-5999DA502DFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E17E5F1-4F93-4C82-B0B1-5999DA502DFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E17E5F1-4F93-4C82-B0B1-5999DA502DFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AC59943-2140-439B-AAA4-BD74CA6207E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AC59943-2140-439B-AAA4-BD74CA6207E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AC59943-2140-439B-AAA4-BD74CA6207E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AC59943-2140-439B-AAA4-BD74CA6207E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
