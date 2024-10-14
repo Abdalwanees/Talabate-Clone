@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Talabate.Clone.Repository",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Talapate.Clone.Services", "Talapate.Clone.Services\Talapate.Clone.Services.csproj", "{4E17E5F1-4F93-4C82-B0B1-5999DA502DFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Talabat-Clone.AdminDashboard", "Talabat-Clone.AdminDashboard\Talabat-Clone.AdminDashboard.csproj", "{5AC59943-2140-439B-AAA4-BD74CA6207E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Talabat.Clone.AdminDashboard", "Talabat-Clone.AdminDashboard\Talabat.Clone.AdminDashboard.csproj", "{5AC59943-2140-439B-AAA4-BD74CA6207E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -20,11 +20,11 @@ namespace Talabate.Clone.Repository.Repositories
         {
             _dbContext = dbContext;
         }
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IReadOnlyList<T>> GetAllAsync()
         {
             if (typeof(T) == typeof(Product))
             {
-                return (IEnumerable < T >) await _dbContext.Set<Product>()
+                return (IReadOnlyList < T >) await _dbContext.Set<Product>()
                     .Include(p => p.Brand)
                     .Include(p => p.Category)
                     .AsNoTracking().ToListAsync();
@@ -43,7 +43,7 @@ namespace Talabate.Clone.Repository.Repositories
 
             return await _dbContext.Set<T>().FindAsync(id); // Use id.Value for FindAsync
         }
-        public async Task<IEnumerable<T>> GetAllWithSpecAsync(ISpecification<T> specification)
+        public async Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecification<T> specification)
         {
             return await SpecificationEvaluator<T>.GetQuary(_dbContext.Set<T>(), specification)
                 .AsNoTracking().ToListAsync();
