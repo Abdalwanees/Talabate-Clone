@@ -7,17 +7,41 @@ using Talabate.Clone.Core.Entites;
 
 namespace Talabate.Clone.Core.Specifications.ProductSpecifications
 {
-    public class ProductIncludesSpecification:BaseSpecifications<Product>
+    public class ProductSpecification : BaseSpecifications<Product>
     {
-        public ProductIncludesSpecification():base()
+        public ProductSpecification(string sort) : base()
         {
-            Includes.Add(P=>P.Brand);
-            Includes.Add(P=>P.Category);
+            Includes.Add(P => P.Brand);
+            Includes.Add(P => P.Category);
+            if (!string.IsNullOrEmpty(sort))
+            {
+                switch (sort)
+                {
+                    case "price":
+                    case "priceAsc":
+                        AddOrderBy(p => p.Price); 
+                        break;
+                    case "priceDesc":
+                        AddOrderByDesc(p => p.Price);
+                        break;
+                    case "name":
+                    case "nameAsc":
+                        AddOrderBy(p => p.Name);
+                        break;
+                    case "nameDesc":
+                        AddOrderByDesc(p => p.Name);
+                        break;
+                    default:
+                        AddOrderBy(P => P.Id);
+                        break;
+                }
+            }
+
         }
-        public ProductIncludesSpecification(int Id):base(P=>P.Id==Id)
+        public ProductSpecification(int Id):base(P => P.Id == Id)
         {
-            Includes.Add(P=>P.Brand);
-            Includes.Add(P=>P.Category);
+                Includes.Add(P => P.Brand);
+                Includes.Add(P => P.Category);
         }
     }
 }

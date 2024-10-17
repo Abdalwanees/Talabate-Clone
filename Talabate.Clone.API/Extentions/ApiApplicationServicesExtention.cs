@@ -15,7 +15,7 @@ namespace Talabate.Clone.API.Extensions
             // Register the DbContext and configure the connection string from configuration
             services.AddDbContext<StoreDbContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnction"));
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
 
             // Register Generic Repository Services
