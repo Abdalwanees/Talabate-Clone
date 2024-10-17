@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Talabate.Clone.API.DTOs;
 using Talabate.Clone.API.Errors;
+using Talabate.Clone.API.Helpers;
 using Talabate.Clone.Core.Entites;
 using Talabate.Clone.Core.Repository.Contruct;
 using Talabate.Clone.Core.Specifications;
@@ -29,13 +30,16 @@ namespace Talabate.Clone.API.Controllers
         [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<ProductDto>>> GetProducts(string? sort, int? brandId, int? categoryId)
+        public async Task<ActionResult<IReadOnlyList<ProductDto>>> GetProducts([FromQuery]ProductSpecParams specParams)
         {
-            var products = await _productRepository.GetAllWithSpecAsync(new ProductSpecification(sort,brandId,categoryId)); // Using Specification pattern
+            var products = await _productRepository.GetAllWithSpecAsync(new ProductSpecification(specParams)); // Using Specification pattern
             if (products != null)
             {
-                var mappedProducts = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductDto>>(products);
-                return Ok(mappedProducts);
+                
+                var data = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductDto>>(products);
+                var countSpec = new ProductWithFilterationSpecCount(specParams);
+                var count =await _productRepository.GetCountAsync(countSpec);
+                return Ok(new PaginationResponse<ProductDto>(specParams.PageSize,specParams.PageIndex,count,data));
             }
             return NotFound(new ApiResponse(404, "No products found"));
         }

@@ -18,6 +18,9 @@ namespace Talabate.Clone.Core.Specifications
         public Expression<Func<T, object>> OrderByDesc { get; set; }
         public Expression<Func<T, object>> ThenBy { get; set; }
         public Expression<Func<T, object>> ThenByDesc { get; set; }
+        public int Take { get ; set ; }// defalut 0
+        public int Skip { get ; set ; }// default 0
+        public bool IsPaginationEnables { get; set; } = false;
 
         public BaseSpecifications() { }
         public BaseSpecifications(Expression<Func<T, bool>> criteriaExpression)
@@ -40,6 +43,12 @@ namespace Talabate.Clone.Core.Specifications
         public void AddThenByDesc(Expression<Func<T, object>> thenbyDescExpression)
         {
             ThenByDesc = thenbyDescExpression;
+        }
+        public void ApplyPagination(int take ,int skip)
+        {
+            IsPaginationEnables = true;
+            Take = take;
+            Skip = skip;
         }
 
 

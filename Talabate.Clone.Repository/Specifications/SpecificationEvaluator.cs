@@ -22,6 +22,7 @@ namespace Talabate.Clone.Repository.Specifications
                 //Quary = _DbContext.Set<BaseEntity>.Where(x=>x.Id=id)
             }
 
+
             if (specification.OrderBy is not null)
             {
                 Query = Query.OrderBy(specification.OrderBy);
@@ -29,6 +30,10 @@ namespace Talabate.Clone.Repository.Specifications
             else if (specification.OrderByDesc is not null)
             {
                 Query = Query.OrderByDescending(specification.OrderByDesc);
+            }
+            if (specification.IsPaginationEnables)
+            {
+                Query = Query.Skip(specification.Skip).Take(specification.Take);
             }
 
             Query = specification.Includes.Aggregate(Query, (currentQuary, includeExpression) => currentQuary.Include(includeExpression));

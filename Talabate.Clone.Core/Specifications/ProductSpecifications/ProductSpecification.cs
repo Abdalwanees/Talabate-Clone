@@ -9,18 +9,18 @@ namespace Talabate.Clone.Core.Specifications.ProductSpecifications
 {
     public class ProductSpecification : BaseSpecifications<Product>
     {
-        public ProductSpecification(string? sort,int? brandId ,int? categoryId) : base(
+        public ProductSpecification(ProductSpecParams specParams) : base(
             P=>
-            (!brandId.HasValue||P.BrandId==brandId.Value)&&
-            (!categoryId.HasValue||P.CategoryId==categoryId.Value)
+            (!specParams.BrandId.HasValue||P.BrandId== specParams.BrandId.Value)&&
+            (!specParams.CategoryId.HasValue||P.CategoryId==specParams.CategoryId.Value)
             
             )
         {
             Includes.Add(P => P.Brand);
             Includes.Add(P => P.Category);
-            if (!string.IsNullOrEmpty(sort))
+            if (!string.IsNullOrEmpty(specParams.Sort))
             {
-                switch (sort)
+                switch (specParams.Sort)
                 {
                     case "price":
                     case "priceAsc":
@@ -41,7 +41,10 @@ namespace Talabate.Clone.Core.Specifications.ProductSpecifications
                         break;
                 }
             }
-
+            //Total product =18
+            //Page Size =5
+            //page Index=2
+            ApplyPagination((specParams.PageIndex - 1) * specParams.PageSize, specParams.PageSize);
         }
         public ProductSpecification(int Id):base(P => P.Id == Id)
         {
