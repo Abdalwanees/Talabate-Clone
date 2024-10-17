@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Talabate.Clone.API.DTOs;
 using Talabate.Clone.API.Errors;
+using Talabate.Clone.API.Helpers;
 using Talabate.Clone.Core.Entites;
 using Talabate.Clone.Core.Repository.Contruct;
 using Talabate.Clone.Core.Specifications;
@@ -29,13 +30,16 @@ namespace Talabate.Clone.API.Controllers
         [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts()
+        public async Task<ActionResult<IReadOnlyList<ProductDto>>> GetProducts([FromQuery]ProductSpecParams specParams)
         {
-            var products = await _productRepository.GetAllWithSpecAsync(new ProductIncludesSpecification()); // Using Specification pattern
+            var products = await _productRepository.GetAllWithSpecAsync(new ProductSpecification(specParams)); // Using Specification pattern
             if (products != null)
             {
-                var mappedProducts = _mapper.Map<IEnumerable<Product>, IEnumerable<ProductDto>>(products);
-                return Ok(mappedProducts);
+                
+                var data = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductDto>>(products);
+                var countSpec = new ProductWithFilterationSpecCount(specParams);
+                var count =await _productRepository.GetCountAsync(countSpec);
+                return Ok(new PaginationResponse<ProductDto>(specParams.PageSize,specParams.PageIndex,count,data));
             }
             return NotFound(new ApiResponse(404, "No products found"));
         }
@@ -45,7 +49,7 @@ namespace Talabate.Clone.API.Controllers
         [HttpGet("/api/product/{Id}")]
         public async Task<ActionResult<ProductDto>> GetProduct(int Id)
         {
-            var product = await _productRepository.GetWithSpecAsync(new ProductIncludesSpecification(Id));
+            var product = await _productRepository.GetWithSpecAsync(new ProductSpecification(Id));
             if (product == null)
             {
                 return NotFound(new ApiResponse(404, "Product not found"));
@@ -57,7 +61,7 @@ namespace Talabate.Clone.API.Controllers
         [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet("brands")]
-        public async Task<ActionResult<IEnumerable<ProductBrandDto>>> GetAllBrands()
+        public async Task<ActionResult<IReadOnlyList<ProductBrandDto>>> GetAllBrands()
         {
             var brands = await _brands.GetAllAsync();
             if (brands == null || !brands.Any())
@@ -65,13 +69,13 @@ namespace Talabate.Clone.API.Controllers
                 return NotFound(new ApiResponse(404, "No brands found"));
             }
 
-            var mappedBrands = _mapper.Map<IEnumerable<ProductBrand>, IEnumerable<ProductBrandDto>>(brands);
+            var mappedBrands = _mapper.Map<IReadOnlyList<ProductBrand>, IReadOnlyList<ProductBrandDto>>(brands);
             return Ok(mappedBrands);
         }
         [ProducesResponseType(typeof(ProductCategoryDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet("categories")]
-        public async Task<ActionResult<IEnumerable<ProductCategoryDto>>> GetAllCategories()
+        public async Task<ActionResult<IReadOnlyList<ProductCategoryDto>>> GetAllCategories()
         {
             var categories = await _categories.GetAllAsync();
             if (categories == null || !categories.Any())
@@ -79,9 +83,8 @@ namespace Talabate.Clone.API.Controllers
                 return NotFound(new ApiResponse(404, "No categories found"));
             }
 
-            var mappedCategories = _mapper.Map<IEnumerable<ProductCategories>, IEnumerable<ProductCategoryDto>>(categories);
+            var mappedCategories = _mapper.Map<IReadOnlyList<ProductCategories>, IReadOnlyList<ProductCategoryDto>>(categories);
             return Ok(mappedCategories);
         }
-
     }
 }

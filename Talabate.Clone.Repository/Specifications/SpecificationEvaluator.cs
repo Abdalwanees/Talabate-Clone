@@ -13,15 +13,30 @@ namespace Talabate.Clone.Repository.Specifications
     internal static class SpecificationEvaluator<TEntity> where TEntity : BaseEntity
     {
 
-        public static IQueryable<TEntity> GetQuary(IQueryable<TEntity> innerQuery , ISpecification<TEntity> specification) 
+        public static IQueryable<TEntity> GetQuary(IQueryable<TEntity> innerQuery, ISpecification<TEntity> specification)
         {
-            var Query=innerQuery;
-            if(specification.Criteria is not null)
+            var Query = innerQuery;
+            if (specification.Criteria is not null)
             {
-               Query= Query.Where(specification.Criteria);
+                Query = Query.Where(specification.Criteria);
                 //Quary = _DbContext.Set<BaseEntity>.Where(x=>x.Id=id)
             }
-            Query=specification.Includes.Aggregate(Query,(currentQuary,includeExpression)=>currentQuary.Include(includeExpression));
+
+
+            if (specification.OrderBy is not null)
+            {
+                Query = Query.OrderBy(specification.OrderBy);
+            }
+            else if (specification.OrderByDesc is not null)
+            {
+                Query = Query.OrderByDescending(specification.OrderByDesc);
+            }
+            if (specification.IsPaginationEnables)
+            {
+                Query = Query.Skip(specification.Skip).Take(specification.Take);
+            }
+
+            Query = specification.Includes.Aggregate(Query, (currentQuary, includeExpression) => currentQuary.Include(includeExpression));
             return Query;
         }
 
