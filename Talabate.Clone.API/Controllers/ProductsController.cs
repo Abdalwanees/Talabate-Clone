@@ -29,9 +29,9 @@ namespace Talabate.Clone.API.Controllers
         [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<ProductDto>>> GetProducts(string Sort)
+        public async Task<ActionResult<IReadOnlyList<ProductDto>>> GetProducts(string? sort, int? brandId, int? categoryId)
         {
-            var products = await _productRepository.GetAllWithSpecAsync(new ProductSpecification(Sort)); // Using Specification pattern
+            var products = await _productRepository.GetAllWithSpecAsync(new ProductSpecification(sort,brandId,categoryId)); // Using Specification pattern
             if (products != null)
             {
                 var mappedProducts = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductDto>>(products);
@@ -82,6 +82,5 @@ namespace Talabate.Clone.API.Controllers
             var mappedCategories = _mapper.Map<IReadOnlyList<ProductCategories>, IReadOnlyList<ProductCategoryDto>>(categories);
             return Ok(mappedCategories);
         }
-
     }
 }

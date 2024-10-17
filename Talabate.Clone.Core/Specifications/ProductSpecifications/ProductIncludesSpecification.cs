@@ -9,7 +9,12 @@ namespace Talabate.Clone.Core.Specifications.ProductSpecifications
 {
     public class ProductSpecification : BaseSpecifications<Product>
     {
-        public ProductSpecification(string sort) : base()
+        public ProductSpecification(string? sort,int? brandId ,int? categoryId) : base(
+            P=>
+            (!brandId.HasValue||P.BrandId==brandId.Value)&&
+            (!categoryId.HasValue||P.CategoryId==categoryId.Value)
+            
+            )
         {
             Includes.Add(P => P.Brand);
             Includes.Add(P => P.Category);
