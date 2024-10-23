@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 using Talabate.Clone.API.Errors;
 using Talabate.Clone.API.Helpers;
+using Talabate.Clone.Core.Entites.Identity;
 using Talabate.Clone.Core.Repository.Contruct;
 using Talabate.Clone.Repository.Data.Contexts;
 using Talabate.Clone.Repository.Data.Identity.Contexts;
@@ -25,7 +27,12 @@ namespace Talabate.Clone.API.Extensions
             {
                 options.UseSqlServer(configuration.GetConnectionString("IdentityConnection"));
             });
-
+            services.AddIdentity<AppUser, IdentityRole>(
+                options =>
+                {
+                    //options.Password.RequireNonAlphanumeric = true;
+                    //options.Password.RequireDigit = true;
+                }).AddEntityFrameworkStores<StoreIdentityDbContext>();
             //Register IConnectionMultiplexer Service-->Same object for any call
             services.AddSingleton<IConnectionMultiplexer>((serviceProvider) =>
             {

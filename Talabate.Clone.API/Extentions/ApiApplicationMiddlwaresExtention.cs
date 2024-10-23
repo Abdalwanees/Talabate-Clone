@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Talabate.Clone.API.MiddleWare;
+using Talabate.Clone.Core.Entites.Identity;
 using Talabate.Clone.Repository.Data.Contexts;
 using Talabate.Clone.Repository.Data.Identity.Contexts;
 
@@ -37,6 +39,7 @@ namespace Talabate.Clone.API.Extensions
                 {
                     var dbContext = services.GetRequiredService<StoreDbContext>();
                     var identityDbContext = services.GetRequiredService<StoreIdentityDbContext>();
+                    var identityUserMangerDbContext = services.GetRequiredService<UserManager<AppUser>>();
 
                     // Apply database migrations
                     await dbContext.Database.MigrateAsync();
@@ -44,6 +47,7 @@ namespace Talabate.Clone.API.Extensions
 
                     // Perform initial data seeding
                     await StoreDbContextSeeding.SeedAsync(dbContext);
+                    await StoreIdentityDbContextSeed.SeedUserAsync(identityUserMangerDbContext);
                 }
                 catch (Exception ex)
                 {
