@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 using Talabate.Clone.API.Errors;
 using Talabate.Clone.API.Helpers;
+using Talabate.Clone.Core.Entites.Identity;
 using Talabate.Clone.Core.Repository.Contruct;
 using Talabate.Clone.Repository.Data.Contexts;
+using Talabate.Clone.Repository.Data.Identity.Contexts;
 using Talabate.Clone.Repository.Repositories;
 using Talabate.Clone.Repository.Repositories.Basket;
 
@@ -14,12 +17,17 @@ namespace Talabate.Clone.API.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
-            // Register the DbContext and configure the connection string from configuration
+            // Register the StoreDbContext and configure the connection string from configuration
             services.AddDbContext<StoreDbContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
-
+            // Register the StoreIdentityDbContext and configure the connection string from configuration
+            services.AddDbContext<StoreIdentityDbContext>(options =>
+            {
+                options.UseSqlServer(configuration.GetConnectionString("IdentityConnection"));
+            });
+            services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<StoreIdentityDbContext>();
             //Register IConnectionMultiplexer Service-->Same object for any call
             services.AddSingleton<IConnectionMultiplexer>((serviceProvider) =>
             {
