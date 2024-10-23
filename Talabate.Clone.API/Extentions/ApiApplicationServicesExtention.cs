@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 using Talabate.Clone.API.Errors;
 using Talabate.Clone.API.Helpers;
 using Talabate.Clone.Core.Repository.Contruct;
 using Talabate.Clone.Repository.Data.Contexts;
 using Talabate.Clone.Repository.Repositories;
+using Talabate.Clone.Repository.Repositories.Basket;
 
 namespace Talabate.Clone.API.Extensions
 {
@@ -18,11 +20,25 @@ namespace Talabate.Clone.API.Extensions
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
 
+            //Register IConnectionMultiplexer Service-->Same object for any call
+            services.AddSingleton<IConnectionMultiplexer>((serviceProvider) =>
+            {
+                var connection = configuration.GetConnectionString("Redis");
+                return ConnectionMultiplexer.Connect(connection);
+
+
+            });
+
+
+            // Register Basket Repository Services
+            services.AddScoped<IBasketRepository, BasketRepository>();
+
             // Register Generic Repository Services
             services.AddScoped(typeof(IGenaricRepository<>), typeof(GenaricRepository<>));
 
             // Register AutoMapper Services
             services.AddAutoMapper(typeof(MappingProfile));
+
 
             // Register validation error configuration for API responses
             services.Configure<ApiBehaviorOptions>(options =>
