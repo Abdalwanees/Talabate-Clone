@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Talabate.Clone.API.MiddleWare;
 using Talabate.Clone.Repository.Data.Contexts;
+using Talabate.Clone.Repository.Data.Identity.Contexts;
 
 namespace Talabate.Clone.API.Extensions
 {
@@ -35,9 +36,11 @@ namespace Talabate.Clone.API.Extensions
                 try
                 {
                     var dbContext = services.GetRequiredService<StoreDbContext>();
+                    var identityDbContext = services.GetRequiredService<StoreIdentityDbContext>();
 
                     // Apply database migrations
                     await dbContext.Database.MigrateAsync();
+                    await identityDbContext.Database.MigrateAsync();
 
                     // Perform initial data seeding
                     await StoreDbContextSeeding.SeedAsync(dbContext);
