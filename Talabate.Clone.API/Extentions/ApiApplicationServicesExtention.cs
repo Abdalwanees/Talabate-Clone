@@ -27,12 +27,7 @@ namespace Talabate.Clone.API.Extensions
             {
                 options.UseSqlServer(configuration.GetConnectionString("IdentityConnection"));
             });
-            services.AddIdentity<AppUser, IdentityRole>(
-                options =>
-                {
-                    //options.Password.RequireNonAlphanumeric = true;
-                    //options.Password.RequireDigit = true;
-                }).AddEntityFrameworkStores<StoreIdentityDbContext>();
+            services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<StoreIdentityDbContext>();
             //Register IConnectionMultiplexer Service-->Same object for any call
             services.AddSingleton<IConnectionMultiplexer>((serviceProvider) =>
             {
