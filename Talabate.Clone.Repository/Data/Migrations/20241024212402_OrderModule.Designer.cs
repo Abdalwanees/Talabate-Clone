@@ -12,7 +12,7 @@ using Talabate.Clone.Repository.Data.Contexts;
 namespace Talabate.Clone.Repository.Data.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    [Migration("20241024203256_OrderModule")]
+    [Migration("20241024212402_OrderModule")]
     partial class OrderModule
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,7 +35,7 @@ namespace Talabate.Clone.Repository.Data.Migrations
                     b.Property<decimal>("Cost")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("DelivaryTime")
+                    b.Property<string>("DeliveryTime")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

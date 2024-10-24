@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Talabate.Clone.Core.Entites;
+using Talabate.Clone.Core.Entites.Order.Aggregrate;
 
 namespace Talabate.Clone.Repository.Data.Contexts
 {
@@ -70,8 +71,28 @@ namespace Talabate.Clone.Repository.Data.Contexts
                     context.Products.AddRange(productData);
                     await context.SaveChangesAsync();
                 }
-
             }
+
+            if (!(context.DelivaryMethods.Count()>0))
+            {
+                var deliverySeedData = await File.ReadAllTextAsync("../Talabate.Clone.Repository/Data/DataSeeding/delivery.json");
+                var deliveryData = JsonSerializer.Deserialize<List<DelivaryMethod>>(deliverySeedData);
+
+                if (deliveryData != null && deliveryData.Any())
+                {
+                    deliveryData = deliveryData.Select(d => new DelivaryMethod()
+                    {
+                        ShortName = d.ShortName,
+                        Description = d.Description,
+                        DeliveryTime = d.DeliveryTime,
+                        Cost = d.Cost
+                    }).ToList();
+
+                    context.DelivaryMethods.AddRange(deliveryData);
+                    await context.SaveChangesAsync();
+                }
+            }
+
         }
 
     }
