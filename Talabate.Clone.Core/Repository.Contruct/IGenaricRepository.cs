@@ -15,5 +15,8 @@ namespace Talabate.Clone.Core.Repository.Contruct
         Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecification<T> specification);
         Task<T?> GetWithSpecAsync(ISpecification<T> specification);
         Task<int> GetCountAsync(ISpecification<T> specification);
+        Task AddAsync(T entity);
+        void UpdayeAsync(T entity);
+        void DeleteAsync(T entity);
     }
 }

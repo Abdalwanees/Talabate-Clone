@@ -8,10 +8,10 @@ namespace Talabate.Clone.Core.Entites.Order.Aggregrate
 {
     public class Order:BaseEntity
     {
-        public Order(string buyerEmail, OrderStatus status, Address shippingAddress, DelivaryMethod delivarymethod, ICollection<OrderItem> items, decimal subTotal)
+        public Order(string buyerEmail, /*OrderStatus status,*/ Address shippingAddress, DelivaryMethod delivarymethod, ICollection<OrderItem> items, decimal subTotal)
         {
             BuyerEmail = buyerEmail;
-            Status = status;
+            //Status = status;
             ShippingAddress = shippingAddress;
             Delivarymethod = delivarymethod;
             Items = items;

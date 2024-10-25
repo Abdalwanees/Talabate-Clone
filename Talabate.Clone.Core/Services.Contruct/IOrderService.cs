@@ -9,7 +9,7 @@ namespace Talabate.Clone.Core.Services.Contruct
 {
     public interface IOrderService
     {
-        Task<Order> CreateOrderAsync(string buyerEmail ,string basketId,int delivaryMethod ,Address address);
+        Task<Order> CreateOrderAsync(string buyerEmail ,string basketId,int delivaryMethodId ,Address address);
         Task<IReadOnlyList<Order>> GetOrdersForUserAsync(string buyerEmail);
         Task<Order> GetOrderByIdForUserAsync(int orderId, string buyerEmail);
     }

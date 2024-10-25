@@ -59,5 +59,20 @@ namespace Talabate.Clone.Repository.Repositories
         {
             return await SpecificationEvaluator<T>.GetQuary(_dbContext.Set<T>(), specification).CountAsync();
         }
+
+        public async Task AddAsync(T entity)
+        {
+            await _dbContext.AddAsync(entity);
+        }
+
+        public  void UpdayeAsync(T entity)
+        {
+             _dbContext.Update(entity);
+        }
+
+        public void DeleteAsync(T entity)
+        {
+            _dbContext.Remove(entity);
+        }
     }
 }
