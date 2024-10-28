@@ -41,8 +41,11 @@ namespace Talabate.Clone.API.Extensions
             // Register Basket Repository Services
             services.AddScoped<IBasketRepository, BasketRepository>();
 
-            // Register Generic Repository Services
-            services.AddScoped(typeof(IGenaricRepository<>), typeof(GenaricRepository<>));
+            //// Register Generic Repository Services
+            //services.AddScoped(typeof(IGenaricRepository<>), typeof(GenaricRepository<>));
+            
+            // Register IUnitOfWork Services
+            services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
 
             // Register AutoMapper Services
             services.AddAutoMapper(typeof(MappingProfile));

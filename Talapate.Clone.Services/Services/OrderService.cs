@@ -37,7 +37,7 @@ namespace Talapate.Clone.Services.Services
             {
                 foreach (var item in basket.Items)
                 {
-                    var product =await _repo.ProductRepo.GetAsync(item.Id);
+                    var product =await _repo.Repository<Product>().GetAsync(item.Id);
                     var productItemOrder = new ProductItemOrder(item.Id, product.Name, product.PictureUrl);
                     var orderItem = new OrderItem(productItemOrder, item.Quantity, product.Price);
                     orderItems.Add(orderItem);
@@ -46,11 +46,13 @@ namespace Talapate.Clone.Services.Services
             // 03 Clculate SubTotal
             var subTotal = orderItems.Sum(orderItem => orderItem.Price* orderItem.Qunatity);
             // 04 Get Delivary method from delivary mrthod repo
-            var delivaryMetod =await _repo.DelivaryMethodRepo.GetAsync(delivaryMethodId);
+            var delivaryMetod =await _repo.Repository<DelivaryMethod>().GetAsync(delivaryMethodId);
 
             // 05 Create order and save database
             var order=new Order(buyerEmail,address, delivaryMetod, orderItems,subTotal);
-            _repo.OrderRepo.AddAsync(order);
+            _repo.Repository<Order>().AddAsync(order);
+            var result=await _repo.CompleteAsync();
+            if (result <= 0) return null;
             return order;
         }
 
