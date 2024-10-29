@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Talabate.Clone.Repository.Data.Migrations
 {
-    public partial class OrderModule : Migration
+    public partial class OrderCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -41,7 +41,7 @@ namespace Talabate.Clone.Repository.Data.Migrations
                     ShippingAddress_City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DelivarymethodId = table.Column<int>(type: "int", nullable: true),
                     SubTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PaymentEntentId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    PaymentEntentId = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,12 +14,13 @@ namespace Talabate.Clone.Repository.Repositories
     public class UnitOfWork : IUnitOfWork
     {
         private readonly StoreDbContext _context;
-        private Dictionary<string, GenaricRepository<BaseEntity>> _repository;
-
+        //private Dictionary<string, GenaricRepository<BaseEntity>> _repository;
+        private Hashtable _repository;
         public UnitOfWork(StoreDbContext context)
         {
             _context = context;
-            _repository = new Dictionary<string, GenaricRepository<BaseEntity>>();
+            _repository = new Hashtable();
+            //_repository = new Dictionary<string, GenaricRepository<BaseEntity>>();
             // Initialize the GenericRepository for all prop
             //ProductRepo=new GenaricRepository<Product>(_context); 
             //ProductBrandRepo=new GenaricRepository<ProductBrand>(_context);
@@ -41,7 +43,7 @@ namespace Talabate.Clone.Repository.Repositories
 
         public async ValueTask DisposeAsync()
         {
-            return await _context.DisposeAsync();
+             await _context.DisposeAsync();
         }
 
         public IGenaricRepository<TEntity> Repository<TEntity>() where TEntity : BaseEntity
@@ -49,7 +51,7 @@ namespace Talabate.Clone.Repository.Repositories
             var Key = typeof(TEntity).Name;
             if (!_repository.ContainsKey(Key))
             {
-                var repository=new GenaricRepository<TEntity>(_context) as GenaricRepository<BaseEntity>
+                var repository = new GenaricRepository<TEntity>(_context) /*as GenaricRepository<BaseEntity>*/;
                 _repository.Add(Key, repository);   
             }
             return _repository[Key] as IGenaricRepository<TEntity>;

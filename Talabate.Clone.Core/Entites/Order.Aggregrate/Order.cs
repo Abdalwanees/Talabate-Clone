@@ -33,8 +33,6 @@ namespace Talabate.Clone.Core.Entites.Order.Aggregrate
         //public decimal Total { get; }
         public decimal GetTotal()
         => SubTotal + Delivarymethod.Cost;
-        public string PaymentEntentId { get; set; }
-
-
+        public string? PaymentEntentId { get; set; }
     }
 }

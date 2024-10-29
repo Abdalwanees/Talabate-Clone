@@ -7,6 +7,7 @@ using Talabate.Clone.Core.Entites;
 using Talabate.Clone.Core.Entites.Order.Aggregrate;
 using Talabate.Clone.Core.Repository.Contruct;
 using Talabate.Clone.Core.Services.Contruct;
+using Talabate.Clone.Core.Specifications.OrderSpecifications;
 
 namespace Talapate.Clone.Services.Services
 {
@@ -56,14 +57,21 @@ namespace Talapate.Clone.Services.Services
             return order;
         }
 
-        public Task<Order> GetOrderByIdForUserAsync(int orderId, string buyerEmail)
+        public async Task<Order?> GetOrderByIdForUserAsync(int orderId, string buyerEmail)
         {
-            throw new NotImplementedException();
+            var orderRepo = _repo.Repository<Order>();
+            var spec = new OrderSpecification(orderId,buyerEmail);
+            var order = await orderRepo.GetWithSpecAsync(spec);
+            return order;
+
         }
 
-        public Task<IReadOnlyList<Order>> GetOrdersForUserAsync(string buyerEmail)
+        public async Task<IReadOnlyList<Order>> GetOrdersForUserAsync(string buyerEmail)
         {
-            throw new NotImplementedException();
+            var orderRepo = _repo.Repository<Order>();
+            var spec = new OrderSpecification(buyerEmail);
+            var orders =await orderRepo.GetAllWithSpecAsync(spec);
+            return orders;
         }
     }
 }

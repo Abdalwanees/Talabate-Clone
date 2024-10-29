@@ -69,7 +69,6 @@ namespace Talabate.Clone.Repository.Data.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("PaymentEntentId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")

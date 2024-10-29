@@ -12,8 +12,8 @@ using Talabate.Clone.Repository.Data.Contexts;
 namespace Talabate.Clone.Repository.Data.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    [Migration("20241024212402_OrderModule")]
-    partial class OrderModule
+    [Migration("20241029124650_OrderCreate")]
+    partial class OrderCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -71,7 +71,6 @@ namespace Talabate.Clone.Repository.Data.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("PaymentEntentId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")

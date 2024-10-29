@@ -6,10 +6,12 @@ using Talabate.Clone.API.Errors;
 using Talabate.Clone.API.Helpers;
 using Talabate.Clone.Core.Entites.Identity;
 using Talabate.Clone.Core.Repository.Contruct;
+using Talabate.Clone.Core.Services.Contruct;
 using Talabate.Clone.Repository.Data.Contexts;
 using Talabate.Clone.Repository.Data.Identity.Contexts;
 using Talabate.Clone.Repository.Repositories;
 using Talabate.Clone.Repository.Repositories.Basket;
+using Talapate.Clone.Services.Services;
 
 namespace Talabate.Clone.API.Extensions
 {
@@ -46,6 +48,9 @@ namespace Talabate.Clone.API.Extensions
             
             // Register IUnitOfWork Services
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
+
+            // Register IOrderService Services
+            services.AddScoped(typeof(IOrderService), typeof(OrderService));
 
             // Register AutoMapper Services
             services.AddAutoMapper(typeof(MappingProfile));
