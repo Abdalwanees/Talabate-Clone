@@ -5,6 +5,7 @@ using Talabate.Clone.API.DTOs;
 using Talabate.Clone.API.Errors;
 using Talabate.Clone.Core.Entites.Order.Aggregrate;
 using Talabate.Clone.Core.Services.Contruct;
+using Talabate.Clone.Repository.Data.Migrations;
 
 namespace Talabate.Clone.API.Controllers
 {
@@ -27,7 +28,7 @@ namespace Talabate.Clone.API.Controllers
             var address=_mapper.Map<AddressDto,Address>(order.ShippingAddress);
             var orderCreated = await _service.CreateOrderAsync(order.BuyerEmail, order.BusketId, order.DelivaryMethod, address);
             if (orderCreated == null) return BadRequest(new ApiResponse(400));
-            return Ok(orderCreated);
+            return Ok(_mapper.Map<Order,OrderToReturnDto>(orderCreated));
         }
 
         //Get Order For Specific User
@@ -37,7 +38,7 @@ namespace Talabate.Clone.API.Controllers
             //Get Order For User
             var orders=await _service.GetOrdersForUserAsync(userEmail);
             if (orders == null) return BadRequest(new ApiResponse(404, "Not Found Orders For this User"));
-            return Ok(orders);
+            return Ok(_mapper.Map<IReadOnlyList<Order>, IReadOnlyList<OrderToReturnDto>>(orders));
         }
         //Get Specific Order For specific User
         [HttpGet("{orderId}")]
@@ -46,7 +47,7 @@ namespace Talabate.Clone.API.Controllers
             //Get Order For User
             var order = await _service.GetOrderByIdForUserAsync( orderId,userEmail);
             if (order == null) return BadRequest(new ApiResponse(404, "Not Found Order For this User"));
-            return Ok(order);
+            return Ok(_mapper.Map<Order, OrderToReturnDto>(order));
         }
     }
 }
