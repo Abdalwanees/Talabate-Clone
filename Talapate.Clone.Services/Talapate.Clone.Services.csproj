@@ -10,8 +10,4 @@
     <ProjectReference Include="..\Talabate.Clone.Repository\Talabate.Clone.Repository.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 </Project>

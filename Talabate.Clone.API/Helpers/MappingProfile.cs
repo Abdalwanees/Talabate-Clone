@@ -2,6 +2,7 @@
 using Talabate.Clone.API.DTOs;
 using Talabate.Clone.Core.Entites;
 using Talabate.Clone.Core.Entites.Busket;
+using Talabate.Clone.Core.Entites.Order.Aggregrate;
 
 namespace Talabate.Clone.API.Helpers
 {
@@ -17,6 +18,7 @@ namespace Talabate.Clone.API.Helpers
             CreateMap<ProductCategories, ProductCategoryDto>().ReverseMap();
             CreateMap<CustomerBasketDto, CustomerBasket>();
             CreateMap<BasketItemDto, BasketItem>();
+            CreateMap<AddressDto, Address>();
         }
     }
 }
