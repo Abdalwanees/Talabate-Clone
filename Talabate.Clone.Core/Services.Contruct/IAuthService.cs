@@ -10,6 +10,6 @@ namespace Talabate.Clone.Core.Services.Contruct
 {
     public interface IAuthService
     {
-        Task<string> CreateUserAsync(AppUser user, UserManager<AppUser> userManager);
+        Task<string> CreateUserTokenAsync(AppUser user, UserManager<AppUser> userManager);
     }
 }

@@ -21,7 +21,7 @@ namespace Talapate.Clone.Services.Services
         {
             _configuration = configuration;
         }
-        public async Task<string> CreateUserAsync(AppUser user, UserManager<AppUser> userManager)
+        public async Task<string> CreateUserTokenAsync(AppUser user, UserManager<AppUser> userManager)
         {
             //Generate Private Claims "Information Exchange"
             var AuthClaims = new List<Claim>()

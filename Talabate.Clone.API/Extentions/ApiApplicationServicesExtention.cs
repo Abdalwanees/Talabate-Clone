@@ -48,6 +48,9 @@ namespace Talabate.Clone.API.Extensions
             
             // Register IUnitOfWork Services
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
+                        
+            // Register IAuth Services
+            services.AddScoped(typeof(IAuthService), typeof(AuthService));
 
             // Register IOrderService Services
             services.AddScoped(typeof(IOrderService), typeof(OrderService));
